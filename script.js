@@ -1,31 +1,40 @@
 window.onload = function() {
-    var news_data = {};
+    //var news_data = {};
 
     var proxy = 'https://cors-anywhere.herokuapp.com/';
-    $.ajax({
-        url: proxy + "https://www.ukr.net/ajax/start.json",
-        //url: proxy + "https://newsapi.org/v1/articles?source=techcrunch&apiKey=57b17d6a88f74e0d9707e756f2fa3fdc",
-        type: "GET",
-        contentType: "application/json; charset=utf-8",
-        dataType: 'json',
+    setInterval(function() {
+        $.ajax({
+            url: proxy + "https://www.ukr.net/ajax/start.json",
+            //url: proxy + "https://newsapi.org/v1/articles?source=techcrunch&apiKey=57b17d6a88f74e0d9707e756f2fa3fdc",
+            type: "GET",
+            contentType: "application/json; charset=utf-8",
+            dataType: 'json',
 
-        crossDomain: true,
-        //beforeSend: function(xhr){xhr.setRequestHeader('X-Test-Header', 'test-value');},
-        beforeSend: function(request) {
-            request.setRequestHeader("Access-Control-Allow-Origin", "*");
-        },
-        success: function(data) {
-            CreateDOM(data.news);
-            this.news_data = data.news;
-            console.log(this.news_data);
-        }
-    });
+            crossDomain: true,
+            //beforeSend: function(xhr){xhr.setRequestHeader('X-Test-Header', 'test-value');},
+            beforeSend: function(request) {
+                request.setRequestHeader("Access-Control-Allow-Origin", "*");
+            },
+            success: function(data) {
+                CreateDOM(data.news);
+                //this.news_data = data.news;
+                //console.log(this.news_data);
+            }
+        })
+    }, 5000);
 
     var CreateDOM = function(some_data) {
+
+        var body = document.body;
+
+        if (document.getElementById('main')) {
+            body.removeChild(document.getElementById('main'));
+        }
         var load_hide = document.getElementById('loading');
         load_hide.style.display = "none";
-
-        var main = document.getElementById('main');
+        //        var main = document.getElementById('main');
+        var main = document.createElement('div');
+        main.id = "main";
         for (var i = 0; i < some_data.length; i++) {
             if (some_data[i].items != null) {
 
@@ -64,6 +73,6 @@ window.onload = function() {
                 }
             }
         }
-
+        body.appendChild(main);
     };
 };
