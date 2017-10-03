@@ -1,4 +1,5 @@
 window.onload = function() {
+    var news_data = {};
 
     var proxy = 'https://cors-anywhere.herokuapp.com/';
     $.ajax({
@@ -14,45 +15,55 @@ window.onload = function() {
             request.setRequestHeader("Access-Control-Allow-Origin", "*");
         },
         success: function(data) {
-            var main = document.getElementById('main');
-            for (var i = 0; i < data.news.length; i++) {
-                if (data.news[i].items != null) {
+            CreateDOM(data.news);
+            /*this.news_data = data.news;
+            console.log(this.news_data);*/
+        }
+    });
 
-                    var h1 = document.createElement('H1');
-                    var container = document.createElement('div');
+    var CreateDOM = function(some_data) {
+        var load_hide = document.getElementById('loading');
+        load_hide.style.display = "none";
 
-                    container.className = "container";
-                    h1.innerHTML = data.news[i].title;
-                    h1.className = "news-title";
-                    container.appendChild(h1);
+        var main = document.getElementById('main');
+        for (var i = 0; i < some_data.length; i++) {
+            if (some_data[i].items != null) {
 
-                    var link_more = document.createElement('A');
-                    link_more.innerHTML = data.news[i].readMore;
-                    container.appendChild(link_more);
+                var h1 = document.createElement('H1');
+                h1.innerHTML = some_data[i].title;
+                h1.className = "news-title";
 
-                    if (data.news[i].items != null) {
-                        var list = document.createElement('UL');
+                var container = document.createElement('div');
+                container.className = "container";
+                container.appendChild(h1);
 
-                        for (var j = 0; j < data.news[i].items.length; j++) {
+                var link_more = document.createElement('A');
+                link_more.innerHTML = some_data[i].readMore;
+                container.appendChild(link_more);
 
-                            var li = document.createElement('LI');
-                            var link = document.createElement('a');
+                if (some_data[i].items != null) {
+                    var list = document.createElement('UL');
 
-                            link.setAttribute("href", data.news[i].items[j].url);
-                            link.className = "link";
-                            link.innerHTML = data.news[i].items[j].title;
-                            li.innerHTML = data.news[i].items[j].date + ":";
-                            li.appendChild(link);
-                            list.appendChild(li);
-                            container.appendChild(list);
-                            main.appendChild(container);
+                    for (var j = 0; j < some_data[i].items.length; j++) {
 
-                        }
+                        var li = document.createElement('LI');
+                        var link = document.createElement('a');
+                        var time = document.createElement('SPAN');
+
+                        link.setAttribute("href", some_data[i].items[j].url);
+                        link.className = "link";
+                        link.innerHTML = some_data[i].items[j].title;
+                        time.innerHTML = "  " + some_data[i].items[j].date;
+                        li.appendChild(link);
+                        li.appendChild(time);
+                        list.appendChild(li);
+                        container.appendChild(list);
+                        main.appendChild(container);
+
                     }
                 }
             }
-
-            console.log(data);
         }
-    });
+
+    };
 };
