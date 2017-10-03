@@ -16,8 +16,8 @@ window.onload = function() {
         },
         success: function(data) {
             CreateDOM(data.news);
-            /*this.news_data = data.news;
-            console.log(this.news_data);*/
+            this.news_data = data.news;
+            console.log(this.news_data);
         }
     });
 
